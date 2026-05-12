@@ -80,7 +80,7 @@ function Login({ setUser }) {
             className="login-input"
             type="password"
             name="password"
-            placeholder="Password"
+            placeholder="Hasło"
             value={form.password}
             onChange={handleChange}
             required

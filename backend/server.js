@@ -231,8 +231,8 @@ app.post("/run", (req, res) => {
 
   if (language == "python" || language == "java" || language == "cpp") {
     const jobId = crypto.randomUUID();
-    const jobDir = path.join(containerTemp, jobId);  // write files
-    const hostJobDir = path.join(hostTemp, jobId);            // mount arg
+    const jobDir = path.join(containerTemp, jobId); 
+    const hostJobDir = path.join(hostTemp, jobId); 
 
     //console.log(jobDir);
     //console.log(hostJobDir);
@@ -267,9 +267,9 @@ app.post("/run", (req, res) => {
 
         "-i", // bedziemy wpisywac input
 
-        "-v", mountArg,                  
+        "-v", mountArg, // folder z plikiem, z którego czytamy                    
 
-        "runcode-python"                 // nazwa image dockera
+        "runcode-python" // nazwa image dockera
       ]);
     }
     else if (language == "java") {
@@ -288,9 +288,9 @@ app.post("/run", (req, res) => {
 
         "-i", // bedziemy wpisywac input
 
-        "-v", mountArg,                  
+        "-v", mountArg, // folder z plikiem, z którego czytamy                    
 
-        "runcode-java"                   // nazwa image dockera
+        "runcode-java" // nazwa image dockera
       ]);
     }
     else if (language == "cpp") {
@@ -309,9 +309,9 @@ app.post("/run", (req, res) => {
 
         "-i", // bedziemy wpisywac input
 
-        "-v", mountArg,                  // folder z plikiem, z którego czytamy
+        "-v", mountArg, // folder z plikiem, z którego czytamy
 
-        "runcode-cpp"                   // nazwa image dockera
+        "runcode-cpp" // nazwa image dockera
       ]);
     }
 
