@@ -1,5 +1,5 @@
-# frontend
-FROM node:20-bookworm AS frontend
+# frontend-dev
+FROM node:20-bookworm AS frontend-dev
 
 WORKDIR /app
 
@@ -11,6 +11,27 @@ COPY frontend/ .
 EXPOSE 5173
 
 CMD ["npm", "run", "dev", "--", "--host"]
+
+# frontend build stage
+FROM node:20-bookworm AS frontend-build
+
+WORKDIR /app
+
+COPY frontend/package*.json ./
+RUN npm install
+
+COPY frontend/ .
+RUN npm run build
+
+# frontend production stage
+FROM nginx:alpine AS frontend
+
+COPY frontend/nginx.conf /etc/nginx/conf.d/default.conf
+COPY --from=frontend-build /app/dist /usr/share/nginx/html
+
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]
 
 # Budowa backendu
 FROM node:20-bookworm AS backend

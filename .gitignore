@@ -6,3 +6,5 @@ build
 *.sqlite
 *.sqlite3
 *.db
+push.ps1
+pushnec.ps1

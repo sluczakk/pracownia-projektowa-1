@@ -1,0 +1,67 @@
+services:
+  frontend:
+    image: sluczakk/rce-frontend:latest
+    container_name: rce-frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+  backend:
+    image: sluczakk/rce-backend:latest
+    container_name: rce-backend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./backend/temp:/app/temp
+      - sqlite-data:/home/data
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - NODE_ENV=production
+      - DATABASE_PATH=/home/data/database_testerumiejetnosciprogramowania.sqlite
+      - HOST_TEMP_PATH=/home/data/temp/
+      # Use these in your backend if you can, instead of hard-coded short image names.
+      - PYTHON_IMAGE=sluczakk/runcode-python:latest
+      - JAVA_IMAGE=sluczakk/runcode-java:latest
+      - CPP_IMAGE=sluczakk/runcode-cpp:latest
+    restart: unless-stopped
+
+  # These services exist mainly so `docker compose pull` downloads the runner images.
+  # They immediately exit and are not exposed to the internet.
+  runcode-python:
+    image: sluczakk/runcode-python:latest
+    container_name: runcode-python
+    entrypoint: ["true"]
+
+  runcode-java:
+    image: sluczakk/runcode-java:latest
+    container_name: runcode-java
+    entrypoint: ["true"]
+
+  runcode-cpp:
+    image: sluczakk/runcode-cpp:latest
+    container_name: runcode-cpp
+    entrypoint: ["true"]
+
+  # Optional helper: creates short local tags like runcode-cpp:latest.
+  # Keep this if your backend currently runs `docker run runcode-cpp` instead of the full Docker Hub image name.
+  tag-runner-images:
+    image: docker:cli
+    container_name: rce-tag-runner-images
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: >
+      sh -c "
+      docker tag sluczakk/runcode-python:latest runcode-python:latest &&
+      docker tag sluczakk/runcode-java:latest runcode-java:latest &&
+      docker tag sluczakk/runcode-cpp:latest runcode-cpp:latest
+      "
+    depends_on:
+      - runcode-python
+      - runcode-java
+      - runcode-cpp
+    restart: "no"
+
+volumes:
+  sqlite-data:
