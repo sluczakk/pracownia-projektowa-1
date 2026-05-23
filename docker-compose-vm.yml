@@ -11,8 +11,8 @@ services:
   backend:
     image: sluczakk/rce-backend:latest
     container_name: rce-backend
-    ports:
-      - "3000:3000"
+    expose:
+      - "3000"
     volumes:
       - ./backend/temp:/app/temp
       - sqlite-data:/home/data

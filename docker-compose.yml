@@ -19,8 +19,8 @@ services:
       target: backend
     container_name: rce-backend
     working_dir: /app
-    ports:
-      - "3000:3000"
+    expose:
+      - "3000"
     volumes:
       - ./backend:/app
       - backend_node_modules:/app/node_modules

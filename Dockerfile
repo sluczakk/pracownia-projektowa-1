@@ -17,6 +17,8 @@ FROM node:20-bookworm AS frontend-build
 
 WORKDIR /app
 
+ENV VITE_API_URL=/api
+
 COPY frontend/package*.json ./
 RUN npm install
 
